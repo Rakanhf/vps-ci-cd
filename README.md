@@ -109,3 +109,6 @@ vps-deploy:
 - Push to your `vps-test` branch → watch the CI deploy automatically.  
 - Merge to `main` (or `staging`) to trigger other environments.  
 - Enjoy zero-downtime, GitHub-driven deployments!
+
+  Note :
+  SSH into the vps using `ssh root@<VPS-IP>` and use the password set for the vps
