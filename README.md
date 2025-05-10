@@ -87,19 +87,32 @@ vps-deploy:
     - name: 🚚 Checkout code
       uses: actions/checkout@v3
 
-    - name: 🔑 SSH & deploy to VPS
+    - name: 📁 Copy entire repo to VPS via SFTP
+      uses: appleboy/scp-action@v0.1.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+        port: 22
+        source: "."                    # <-- copy everything
+        target: ${{ secrets.REMOTE_APP_PATH }}
+        recursive: true
+
+    - name: 🔑 SSH & rebuild on VPS
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+        port: 22
         script: |
           set -e
           cd ${{ secrets.REMOTE_APP_PATH }}
-          echo "🚀 Rebuilding with Docker Compose…"
-          docker compose -f docker-compose.local.yml pull
-          docker compose -f docker-compose.local.yml up -d --build
+          echo "⏳ Pulling latest images & rebuilding with prod compose…"
+          docker compose -f docker-compose.prod.yml pull
+          docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 ---
