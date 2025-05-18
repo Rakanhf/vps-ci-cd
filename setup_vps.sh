@@ -8,15 +8,11 @@ KEY_COMMENT=${3:-actions@$(hostname)}
 KEY_NAME="actions-to-vps"
 KEY_PATH="/home/$DEPLOY_USER/.ssh/$KEY_NAME"
 
-echo "→ 1. Create deploy user [$DEPLOY_USER] if it doesn't exist"
-if ! id -u "$DEPLOY_USER" &>/dev/null; then
-  adduser --disabled-password --gecos "" "$DEPLOY_USER"
-fi
+echo "→ 1. Install Docker & Compose plugin"
+curl -fsSL https://get.docker.com | sh
+apt install -y docker-compose-plugin
 
-echo "→ 2. Add $DEPLOY_USER to sudo and docker groups"
-usermod -aG sudo,docker "$DEPLOY_USER"
-
-echo "→ 3. Install & configure OpenSSH + UFW"
+echo "→ 2. Install & configure OpenSSH + UFW"
 apt update
 apt install -y openssh-server ufw
 # disable root & password auth, enable key auth
@@ -27,9 +23,13 @@ ufw allow OpenSSH
 ufw allow 80,443/tcp
 ufw --force enable
 
-echo "→ 4. Install Docker & Compose plugin"
-curl -fsSL https://get.docker.com | sh
-apt install -y docker-compose-plugin
+echo "→ 3. Create deploy user [$DEPLOY_USER] if it doesn't exist"
+if ! id -u "$DEPLOY_USER" &>/dev/null; then
+  adduser --disabled-password --gecos "" "$DEPLOY_USER"
+fi
+
+echo "→ 4. Add $DEPLOY_USER to sudo and docker groups"
+usermod -aG sudo,docker "$DEPLOY_USER"
 
 echo "→ 5. Prepare .ssh for $DEPLOY_USER"
 sudo -u "$DEPLOY_USER" mkdir -p "/home/$DEPLOY_USER/.ssh"
