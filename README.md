@@ -40,7 +40,7 @@ Go to **YourRepo → Settings → Secrets and Variables → Actions** and add:
 - `VPS_USER` = the deploy user (default: `deployer`)  
 - `VPS_SSH_KEY` = *paste the private key* from step 1  
 - `VPS_SSH_PASSPHRASE` = leave blank (we generated with no passphrase)  
-- `REMOTE_APP_PATH` = `/home/deployer/api.feedmena.com`  
+- `REMOTE_APP_PATH` = `/home/deployer/{APP-DIR}`  
 
 ---
 
