@@ -66,7 +66,7 @@ Ensure that your workflow copies:
 - `docker-compose.local.yml`  
 - `docker-compose.prod.yml`  
 - `Dockerfile`  
-- `posmena-feedback/` (your code)  
+- `app/` (your code)  
 - `Caddyfile` and `Caddyfile.local`  
 - `config/.env.prod` or `.env.local`  
 
